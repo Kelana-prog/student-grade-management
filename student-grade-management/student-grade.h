@@ -7,5 +7,6 @@ void addStudent();
 void displayStudents();
 void searchStudent();
 void sortStudents();
+void loadFromFile();
 
 #endif

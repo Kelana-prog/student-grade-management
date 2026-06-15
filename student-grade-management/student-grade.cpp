@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <cctype>
+#include <fstream>
+#include <sstream>
 #include "student-grade.h"
 #include "Student.h"
 
@@ -9,7 +11,8 @@ using namespace std;
 // Global storage
 vector<Student> students;
 
-// Menu
+
+// ================= MENU =================
 void showMenu() {
     cout << "\n===== Student Grade Management System =====\n";
     cout << "1. Add Student\n";
@@ -20,7 +23,8 @@ void showMenu() {
     cout << "Enter your choice: ";
 }
 
-// Add Student FUNCTION (fully working)
+
+// ================= ADD =================
 void addStudent() {
     string id, name;
     char grade;
@@ -37,22 +41,21 @@ void addStudent() {
 
     grade = toupper(grade);
 
-    // Validate grade
     if (grade != 'A' && grade != 'B' && grade != 'C' &&
         grade != 'D' && grade != 'F') {
-        cout << "Invalid grade! Student not added.\n";
+        cout << "Invalid grade!\n";
         return;
     }
 
     Student s;
     s.setData(id, name, grade);
-
     students.push_back(s);
 
     cout << "Student added successfully!\n";
 }
 
-// Add Display Student FUNCTION (fully working)
+
+// ================= DISPLAY =================
 void displayStudents() {
     if (students.empty()) {
         cout << "\nNo student records found.\n";
@@ -66,7 +69,8 @@ void displayStudents() {
     }
 }
 
-// Add seacrh FUNCTION (fully working)
+
+// ================= SEARCH =================
 void searchStudent() {
     if (students.empty()) {
         cout << "\nNo student records found.\n";
@@ -103,7 +107,6 @@ void searchStudent() {
         getline(cin, searchName);
 
         for (int i = 0; i < students.size(); i++) {
-            // Partial match using find()
             if (students[i].getName().find(searchName) != string::npos) {
                 students[i].display();
                 found = true;
@@ -113,7 +116,7 @@ void searchStudent() {
 
     else if (choice == 3) {
         char searchGrade;
-        cout << "Enter grade (A/B/C/D/F): ";
+        cout << "Enter grade: ";
         cin >> searchGrade;
 
         searchGrade = toupper(searchGrade);
@@ -126,17 +129,135 @@ void searchStudent() {
         }
     }
 
-    else {
-        cout << "Invalid choice!\n";
-        return;
-    }
-
     if (!found) {
         cout << "\nNo matching student found.\n";
     }
 }
 
-// Placeholder functions
+
+// ================= QUICK SORT (ID) =================
+int partitionID(vector<Student>& students, int low, int high, bool ascending) {
+    string pivot = students[high].getId();
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if ((ascending && students[j].getId() < pivot) ||
+            (!ascending && students[j].getId() > pivot)) {
+            i++;
+            swap(students[i], students[j]);
+        }
+    }
+
+    swap(students[i + 1], students[high]);
+    return i + 1;
+}
+
+void quickSortID(vector<Student>& students, int low, int high, bool ascending) {
+    if (low < high) {
+        int pi = partitionID(students, low, high, ascending);
+
+        quickSortID(students, low, pi - 1, ascending);
+        quickSortID(students, pi + 1, high, ascending);
+    }
+}
+
+
+// ================= QUICK SORT (NAME) =================
+int partitionName(vector<Student>& students, int low, int high, bool ascending) {
+    string pivot = students[high].getName();
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if ((ascending && students[j].getName() < pivot) ||
+            (!ascending && students[j].getName() > pivot)) {
+            i++;
+            swap(students[i], students[j]);
+        }
+    }
+
+    swap(students[i + 1], students[high]);
+    return i + 1;
+}
+
+void quickSortName(vector<Student>& students, int low, int high, bool ascending) {
+    if (low < high) {
+        int pi = partitionName(students, low, high, ascending);
+
+        quickSortName(students, low, pi - 1, ascending);
+        quickSortName(students, pi + 1, high, ascending);
+    }
+}
+
+
+// ================= SORT =================
 void sortStudents() {
-    cout << "Function not implemented yet.\n";
+    if (students.empty()) {
+        cout << "\nNo student records to sort.\n";
+        return;
+    }
+
+    int fieldChoice, orderChoice;
+
+    cout << "\nSort by:\n";
+    cout << "1. ID\n";
+    cout << "2. Name\n";
+    cout << "Enter choice: ";
+    cin >> fieldChoice;
+
+    cout << "\nOrder:\n";
+    cout << "1. Ascending\n";
+    cout << "2. Descending\n";
+    cout << "Enter choice: ";
+    cin >> orderChoice;
+
+    bool ascending = (orderChoice == 1);
+
+    if (fieldChoice == 1) {
+        quickSortID(students, 0, students.size() - 1, ascending);
+    }
+    else if (fieldChoice == 2) {
+        quickSortName(students, 0, students.size() - 1, ascending);
+    }
+    else {
+        cout << "Invalid choice!\n";
+        return;
+    }
+
+    cout << "\nStudents sorted successfully!\n";
+
+    displayStudents();
+}
+
+// ================= LOAD DUMMY DATA =================
+void loadFromFile() {
+    ifstream file("students.txt");
+
+    if (!file) {
+        cout << "\nError opening file!\n";
+        return;
+    }
+
+    string line;
+
+    while (getline(file, line)) {
+        string id, name, gradeStr;
+
+        stringstream ss(line);
+
+        // split by comma
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, gradeStr, ',');
+
+        char grade = gradeStr[0];  // convert string to char
+
+        Student s;
+        s.setData(id, name, grade);
+
+        students.push_back(s);
+    }
+
+    file.close();
+
+    cout << "\nData loaded from file successfully!\n";
 }

@@ -5,6 +5,8 @@ using namespace std;
 int main() {
     int choice;
 
+    loadFromFile();
+
     do {
         showMenu();
         cin >> choice;
