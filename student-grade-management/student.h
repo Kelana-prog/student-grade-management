@@ -34,7 +34,7 @@ public:
 
     // Display function
     void display() {
-        cout << "ID: " << id << endl;
+        cout << "\nID: " << id << endl;
         cout << "Name: " << name << endl;
         cout << "Grade: " << grade << endl;
         cout << "----------------------\n";

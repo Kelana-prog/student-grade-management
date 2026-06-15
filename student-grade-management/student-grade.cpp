@@ -66,11 +66,77 @@ void displayStudents() {
     }
 }
 
-// Placeholder functions
+// Add seacrh FUNCTION (fully working)
 void searchStudent() {
-    cout << "Function not implemented yet.\n";
+    if (students.empty()) {
+        cout << "\nNo student records found.\n";
+        return;
+    }
+
+    int choice;
+    cout << "\nSearch by:\n";
+    cout << "1. ID\n";
+    cout << "2. Name\n";
+    cout << "3. Grade\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    bool found = false;
+
+    if (choice == 1) {
+        string searchId;
+        cout << "Enter ID: ";
+        cin >> searchId;
+
+        for (int i = 0; i < students.size(); i++) {
+            if (students[i].getId() == searchId) {
+                students[i].display();
+                found = true;
+            }
+        }
+    }
+
+    else if (choice == 2) {
+        string searchName;
+        cout << "Enter name (or part of name): ";
+        cin.ignore();
+        getline(cin, searchName);
+
+        for (int i = 0; i < students.size(); i++) {
+            // Partial match using find()
+            if (students[i].getName().find(searchName) != string::npos) {
+                students[i].display();
+                found = true;
+            }
+        }
+    }
+
+    else if (choice == 3) {
+        char searchGrade;
+        cout << "Enter grade (A/B/C/D/F): ";
+        cin >> searchGrade;
+
+        searchGrade = toupper(searchGrade);
+
+        for (int i = 0; i < students.size(); i++) {
+            if (students[i].getGrade() == searchGrade) {
+                students[i].display();
+                found = true;
+            }
+        }
+    }
+
+    else {
+        cout << "Invalid choice!\n";
+        return;
+    }
+
+    if (!found) {
+        cout << "\nNo matching student found.\n";
+    }
 }
 
+// Placeholder functions
 void sortStudents() {
     cout << "Function not implemented yet.\n";
 }
