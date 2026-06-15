@@ -18,5 +18,13 @@
     <ClCompile Include="student-grade-management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="student-grade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="student-grade.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

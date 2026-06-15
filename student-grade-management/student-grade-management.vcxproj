@@ -140,6 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="student-grade-management.cpp" />
+    <ClCompile Include="student-grade.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="student-grade.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
