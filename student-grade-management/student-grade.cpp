@@ -259,5 +259,4 @@ void loadFromFile() {
 
     file.close();
 
-    cout << "\nData loaded from file successfully!\n";
 }
